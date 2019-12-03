@@ -535,7 +535,7 @@ class BinanceChainSocketManager(BinanceChainSocketManagerBase):
         req_msg = {
             "method": "subscribe",
             "topic": "accounts",
-            "userAddress": address
+            "address": address
         }
         await self._conn.send_message(req_msg)
 
