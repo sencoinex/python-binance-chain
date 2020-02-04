@@ -5,14 +5,14 @@ from typing import Optional, Dict
 import asyncio
 import aiohttp
 import requests
-
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 import binance_chain.messages
 from binance_chain.environment import BinanceEnvironment
 from binance_chain.constants import PeerType, KlineInterval, OrderSide, OrderStatus, TransactionSide, TransactionType
 from binance_chain.exceptions import (
     BinanceChainAPIException, BinanceChainRequestException, BinanceChainBroadcastException
 )
-
 
 requests.models.json = ujson
 
@@ -40,14 +40,14 @@ class BaseApiClient:
             client = Client(testnet_env)
 
         """
-
         self._env = env or BinanceEnvironment.get_production_env()
         self._requests_params = requests_params
         self.session = self._init_session(**kwargs)
 
     def _init_session(self, **kwargs):
-
         session = requests.session()
+        if 'cert' in kwargs:
+            session.verify = kwargs['cert']
         headers = self._get_headers()
         session.headers.update(headers)
         return session
