@@ -95,7 +95,7 @@ class HttpApiClient(BaseApiClient):
         uri = self._create_uri(path)
 
         kwargs = self._get_request_kwargs(method, **kwargs)
-
+        print(uri)
         response = getattr(self.session, method)(uri, **kwargs)
         return self._handle_response(response)
 
@@ -136,6 +136,9 @@ class HttpApiClient(BaseApiClient):
 
     def _delete(self, path, **kwargs):
         return self._request('delete', path, **kwargs)
+
+    def ping(self):
+        return self._get("ping")
 
     def get_time(self):
         """Get the server timestamp
